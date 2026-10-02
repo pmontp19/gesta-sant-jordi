@@ -2,7 +2,7 @@
 
 Joc de navegador a l'estil de Nimble Quest amb llegendes de dracs catalanes i bestiari de festa. Guies una comitiva que avança com una serp: els herois ataquen sols i tu només tries cap on van. Alliberes presoners perquè s'afegeixin a la cua, i les bèsties de festa no es maten: quan se'ls acaba la pólvora, s'uneixen a la comitiva.
 
-**Juga-hi:** obre `index.html` en un navegador (no cal servidor ni instal·lar res) o la [versió publicada](https://claude.ai/artifact/Y1ipDfesgRnS3A4gRoznFk).
+**Juga-hi:** https://pmontp19.github.io/gesta-sant-jordi/ (o obre `index.html` en un navegador: no cal servidor ni instal·lar res).
 
 Fletxes o WASD per girar, Espai per aturar, M per al so. Al mòbil, llisca el dit. Per anar directament a un capítol: `index.html#capitol5`.
 
