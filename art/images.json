@@ -1,0 +1,219 @@
+{
+  "jordi": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "Saint George (Sant Jordi) as a young medieval knight on foot, three-quarter view facing right: silver plate armor and chainmail, white surcoat with a large red cross (the Saint George cross), open-faced silver helmet with a small red plume, red cape, holding a long sword upright.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "drac-vilafranca": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "The Drac de Vilafranca del Penedes, a traditional Catalan festival dragon figure (bestiari festiu) documented since 1600, side view facing right: dark green skin, carved wooden head with an open red mouth, stiff wooden bat wings, long segmented tail, spitting golden firework sparks; it is carried by people hidden under a cloth skirt, their feet visible below the figure.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 64x64 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "guita": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "La Guita Xica of the Patum de Berga, a traditional Catalan festival beast figure, side view facing right: dragon head on a very long giraffe-like neck, mule body covered with a dark cloth, horse tail, golden fireworks spitting sparks from its mouth, carried by people hidden under the cloth with their feet visible.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 64x64 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "mulassa": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "La Mulassa de Reus, a traditional Catalan festival beast figure (bestiari festiu), side view facing right: a big dark mule figure with a decorated red and gold caparison and a long skirt hiding the bearers (their feet visible below), fireworks on its head spraying sparks.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 64x64 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "pastor": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "A medieval Catalan shepherd, three-quarter view facing right: red barretina (traditional Catalan wool cap) flopping to one side, short brown beard, white sheepskin vest over a green tunic, red sash, rope sandals (espardenyes), holding a wooden shepherd's crook.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "rei": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "An old medieval king, three-quarter view facing right: long white beard, gold crown with red gems, red cloak with white ermine trim over a purple robe, holding a golden sceptre.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "princesa": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "The princess of the Catalan Saint George legend, three-quarter view facing right: long golden-blond hair, small gold crown, long rose-pink gown with gold trim, holding a single red rose.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "ballester": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "A medieval Catalan crossbowman, three-quarter view facing right: iron kettle hat, padded tunic with vertical yellow and red stripes (the Catalan flag), holding a loaded wooden crossbow.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "soler": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "Soler de Vilardell, a 14th-century Catalan knight, three-quarter view facing right: dark steel full plate armor, closed great helm, blue surcoat with a gold cross, holding a magic sword whose blade glows pale cyan.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "jordina": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "Santa Jordina, a brave young princess-knight, three-quarter view facing right: long orange-red braided hair, small gold crown, silver breastplate over a pink skirt, holding a lance with a small red pennant.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "cervantes": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "Miguel de Cervantes, early 17th-century writer, three-quarter view facing right: balding, brown hair, moustache and pointed goatee, large white ruff collar, black doublet, holding a quill pen in his right hand, left arm limp at his side.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "mer": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "Sant Mer, a medieval hermit monk from Banyoles, three-quarter view facing right: tonsured head, short beard, brown wool habit with a rope belt, carrying a coiled white rope over the shoulder.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "shakespeare": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "William Shakespeare as in the Chandos portrait, three-quarter view facing right: high bald forehead, shoulder-length brown hair, short beard and moustache, small gold earring, plain white collar, dark doublet, holding a small book.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "serp": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "An olive-green snake coiled and ready to strike, side view facing right, forked red tongue.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "captaire": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "A mysterious medieval beggar, three-quarter view facing right: ragged brown hooded cloak hiding most of the face, glowing yellow eyes in the shadow of the hood, long white beard, leaning on a wooden staff.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "ratpenat": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "A purple bat flying with spread wings, front view, glowing yellow eyes, small white fangs.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "llop": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "A grey wolf walking and snarling, side view facing right.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "granota": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "A big green frog crouching, front view, yellow eyes, pale belly.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "colom": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "A Barcelona city pigeon standing, side view facing right: grey body, iridescent green and purple neck, pink feet.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "gavina": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "A seagull standing, side view facing right: white body, grey wings with black tips, yellow beak with a red spot.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "diable": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "A 'diable' dancer from a Catalan correfoc (ball de diables), three-quarter view facing right: red and black costume with a hood with two small horns, holding up a pitchfork-shaped 'forca' with a spinning firework spraying golden sparks.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "dragonet": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "A small young dragon, side view facing right: olive-green scales, yellow belly, small bat wings, short tail.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "drac-montblanc": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "The dragon of the Catalan Saint George legend of Montblanc, side view facing right: large green scaly dragon with bat-like wings, long tail, sharp claws, a small flame coming out of its open jaws.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 64x64 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "drac-vilardell": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "The dragon of Vilardell from the Sant Celoni legend, side view facing right: dark purple poisonous dragon with green venom dripping from its jaws, bat wings, spiky back.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 64x64 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "drac-banyoles": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "The dragon of Banyoles lake, side view facing right: blue aquatic dragon with fins on the back, webbed feet, shiny wet scales.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 64x64 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "drac-vege": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "A friendly vegetarian dragon, side view facing right: light green, chubby, big smile, a red rose tucked behind its ear, holding a lettuce.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 64x64 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "cucafera": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "La Cucafera de Tortosa, a traditional Catalan festival beast figure, side view facing right: half dragon half turtle, big domed green shell, long extendable neck with a dragon head and snapping jaws with a red mouth, carried by people hidden under a skirt below the shell, their feet visible.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 64x64 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "brivia": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "La Brivia, the vibria of Sant Llorenc del Munt: a fierce winged serpent-dragon, side view facing right, teal and black scales, long serpent tail instead of legs at the back, large bat wings, golden belly.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 64x64 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "rosa": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "A single red rose with a green stem and two leaves, upright.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "ovella": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "A white woolly sheep standing, side view facing right, black face and black legs.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  },
+  "llibre": {
+    "tool": "codex image_gen (ChatGPT subscription)",
+    "model": "gpt-5.6-luna",
+    "effort": "low",
+    "date": "2026-10-01",
+    "prompt": "A closed old hardcover book seen at an angle, red cover with gold decoration.\n\nPixel art sprite for a retro 2D action game in the style of 16-bit SNES era games. A single subject, full body, centered and filling most of the frame. Crisp chunky square pixels on a regular pixel grid, as if drawn at 32x32 pixels and upscaled with nearest neighbour. No anti-aliasing, no gradients, no dithering noise. Limited palette of about 16 saturated colors, a strong 1-pixel dark outline around the silhouette, simple shading with one highlight and one shadow tone. Background: perfectly flat solid pure magenta #FF00FF (never black, never dark, never a scene) filling the whole image edge to edge, nothing else in the background, no ground, no cast shadow, no text, no border, no frame.\n\nAvoid: photorealistic, 3D render, smooth shading, blurry, gradient background, text, watermark, signature, multiple characters, cropped, frame"
+  }
+}

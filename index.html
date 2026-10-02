@@ -1,0 +1,978 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La Gesta de Sant Jordi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@700&family=Grenze:wght@400;600&family=Pixelify+Sans:wght@500;700&display=swap">
+<style>
+/* Layout: illuminated-manuscript frame (lapis + gold), HUD over a pixel-perfect canvas, parchment cards as overlays */
+:root{
+  --lapis:#1c2350; --lapis-deep:#121735; --gold:#d6a53a; --gold-dim:#8a6a2a;
+  --vermilion:#c0392b; --parch:#efe2c2; --parch-dim:#b9ad91; --ink:#2a1c12; --ink-dim:#6b5844;
+  --f-display:"Grenze Gotisch", "UnifrakturMaguntia", Georgia, serif;
+  --f-body:"Grenze", Georgia, serif;
+  --f-pixel:"Pixelify Sans", ui-monospace, monospace;
+  color-scheme:dark;
+}
+[hidden]{display:none!important}
+html{height:100%;box-sizing:border-box}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  height:100%;margin:0;padding-inline:16px;overflow:hidden;
+  background:radial-gradient(circle,rgba(214,165,58,.14) 0 1.5px,transparent 2px) 0 0/22px 22px,var(--lapis-deep);
+  color:var(--parch);font:17px/1.4 var(--f-body);
+}
+.app{height:100%;max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:8px;padding-block:10px}
+.hud{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 20px}
+.brand{display:grid;gap:2px;min-width:0}
+h1{margin:0;font:700 clamp(1.4rem,3.6vw,2.2rem)/1 var(--f-display);color:var(--gold);text-wrap:balance}
+h1 span{color:var(--vermilion)}
+.place{margin:0;font-size:.85rem;color:var(--parch-dim);letter-spacing:.02em}
+.right{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
+.stats{display:flex;gap:16px;margin:0}
+.stats div{display:grid;justify-items:end}
+dt{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--parch-dim)}
+dd{margin:0;font:700 1.2rem/1.1 var(--f-pixel);color:var(--gold);font-variant-numeric:tabular-nums}
+.btns{display:flex;gap:8px}
+.ghost{font:500 .9rem var(--f-pixel);background:transparent;color:var(--gold);border:2px solid var(--gold-dim);padding:.3em .7em;cursor:pointer;border-radius:2px}
+.ghost:hover{border-color:var(--gold)}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.stage{flex:1;min-height:0;position:relative;display:grid;place-items:center;touch-action:none}
+canvas#cv{display:block;image-rendering:pixelated;box-shadow:0 0 0 3px var(--gold),0 0 0 6px var(--lapis-deep),0 0 0 8px var(--gold-dim),0 18px 40px rgba(0,0,0,.55)}
+.hint{margin:0;text-align:center;font-size:.85rem;color:var(--parch-dim)}
+.touch{display:none}
+@media (pointer:coarse){.kb{display:none}.touch{display:inline}}
+.overlay{position:absolute;inset:0;display:grid;place-items:center;padding:10px;background:rgba(18,23,53,.62);touch-action:auto}
+.card{width:100%;max-width:40rem;max-height:100%;overflow:auto;background:var(--parch);color:var(--ink);border:2px solid var(--gold);outline:1px solid var(--gold-dim);outline-offset:-7px;padding:22px 26px;border-radius:2px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.eyebrow{margin:0;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--vermilion);font-weight:600}
+.card h2{margin:.15em 0 .4em;font:700 clamp(1.7rem,5vw,2.3rem)/1.05 var(--f-display);color:var(--ink);text-wrap:balance}
+.card h3{margin:1rem 0 .4rem;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim);font-weight:600}
+.lede{margin:0;max-width:62ch}
+.lede::first-letter{float:left;font:700 3.3em/.78 var(--f-display);color:var(--vermilion);padding:.06em .08em 0 0}
+.outro{margin:0;max-width:62ch}
+.rules{margin:.4rem 0 0;padding-left:1.1rem}
+.rules li::marker{color:var(--vermilion)}
+.chapters{margin:.4rem 0 0;padding-left:1.4rem;columns:2 14rem;column-gap:1.5rem}
+.chapters li::marker{font-family:var(--f-display);color:var(--vermilion)}
+.chapters b{font-weight:600}
+.chap{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left;text-decoration:underline dotted var(--gold-dim);text-underline-offset:3px}
+.chap:hover{color:var(--vermilion)}
+.small{margin:.3rem 0 0;font-size:.82rem;color:var(--ink-dim)}
+.btn-alt{font:700 1.15rem/1 var(--f-display);background:transparent;color:var(--vermilion);border:2px solid var(--vermilion);padding:.4em .9em .45em;cursor:pointer;border-radius:2px}
+.roster{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(4.9rem,1fr));gap:10px}
+.roster.tight{grid-template-columns:repeat(auto-fill,minmax(3.4rem,1fr));gap:6px}
+.roster li{display:grid;justify-items:center;align-content:start;text-align:center;gap:2px;min-width:0}
+.roster b{font-weight:600;font-size:.92rem;line-height:1.1}
+.roster small{font-size:.76rem;line-height:1.15;color:var(--ink-dim)}
+canvas.spr{image-rendering:pixelated}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:1.1rem}
+.btn{font:700 1.35rem/1 var(--f-display);background:var(--vermilion);color:var(--parch);border:2px solid var(--gold);padding:.4em 1.1em .45em;cursor:pointer;border-radius:2px}
+.btn:hover{filter:brightness(1.12)}
+.actions small{color:var(--ink-dim)}
+.final{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:.8rem 0 0}
+.final div{display:grid;gap:2px}
+.final dt{color:var(--ink-dim)}
+.final dd{color:var(--vermilion);font-size:1.5rem}
+@media (max-width:560px){.final{grid-template-columns:repeat(2,1fr)}.card{padding:18px}.stats{gap:10px}dd{font-size:1.05rem}}
+</style>
+
+<main class="app">
+  <header class="hud">
+    <div class="brand">
+      <h1>La Gesta de <span>Sant Jordi</span></h1>
+      <p class="place" id="place">Montblanc · L'estany del drac</p>
+    </div>
+    <div class="right">
+      <dl class="stats">
+        <div><dt>Capítol</dt><dd id="chap">I</dd></div>
+        <div><dt>Onada</dt><dd id="wave">0</dd></div>
+        <div><dt>Punts</dt><dd id="score">0</dd></div>
+        <div><dt>Rècord</dt><dd id="best">0</dd></div>
+      </dl>
+      <div class="btns">
+        <button class="ghost" id="snd" type="button">So: sí</button>
+        <button class="ghost" id="pause" type="button">Pausa</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="stage" id="stage">
+    <canvas id="cv"></canvas>
+
+    <section class="overlay" id="intro">
+      <div class="card">
+        <p class="eyebrow">Sis capítols, una comitiva</p>
+        <h2>El drac ha tornat</h2>
+        <p class="lede">Sant Jordi surt de Montblanc, recorre les terres dels dracs, travessa un correfoc ple de bestiari de festa i arriba a la Rambla un 23 d'abril. Els herois ataquen sols: tu només decideixes cap on va la comitiva.</p>
+        <ol class="chapters" id="chapters"></ol>
+        <p class="small">Toca un capítol per començar-hi directament, amb la comitiva que hi tocaria.</p>
+        <ul class="rules">
+          <li>Passa per sobre de les gàbies i el presoner s'afegirà a la cua.</li>
+          <li>De la sang de les bèsties neixen roses, i cada rosa cura tota la comitiva.</li>
+          <li>Si toques la muralla, l'aigua, una roca o la teva pròpia cua, s'acaba la gesta.</li>
+          <li>Cada capítol té tres onades i un drac.</li>
+          <li>Les bèsties de festa no es maten: quan se'ls acaba la pólvora, s'uneixen a la comitiva.</li>
+        </ul>
+        <h3>La comitiva</h3>
+        <ul class="roster tight" id="all-heroes"></ul>
+        <div class="actions">
+          <button class="btn" id="go" type="button">Comença la gesta</button>
+          <small>Fletxes o WASD per girar · Espai per aturar · M per al so · Al mòbil, llisca</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="overlay" id="chapter" hidden>
+      <div class="card">
+        <p class="eyebrow" id="ch-eyebrow">Capítol I · Montblanc</p>
+        <h2 id="ch-title">L'estany del drac</h2>
+        <p class="lede" id="ch-story"></p>
+        <h3 id="ch-h-heroes">Presoners per alliberar</h3>
+        <ul class="roster" id="ch-heroes"></ul>
+        <h3>Bèsties i troballes</h3>
+        <ul class="roster" id="ch-foes"></ul>
+        <div class="actions">
+          <button class="btn" id="ch-go" type="button">Endavant</button>
+          <small>o prem Retorn</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="overlay" id="over" hidden>
+      <div class="card">
+        <p class="eyebrow" id="o-eyebrow">Fi de la gesta</p>
+        <h2 id="reason">Tota la comitiva ha caigut.</h2>
+        <p class="outro" id="o-text"></p>
+        <dl class="final">
+          <div><dt>Capítol</dt><dd id="o-chap">I</dd></div>
+          <div><dt>Bèsties</dt><dd id="o-kills">0</dd></div>
+          <div><dt>Punts</dt><dd id="o-score">0</dd></div>
+          <div><dt>Rècord</dt><dd id="o-best">0</dd></div>
+        </dl>
+        <div class="actions">
+          <button class="btn" id="again" type="button">Torna-hi</button>
+          <button class="btn-alt" id="retry" type="button">Repeteix el capítol</button>
+          <small>o prem Retorn</small>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <p class="hint"><span class="kb">Fletxes o WASD per girar · Espai per aturar · M per al so</span><span class="touch">Llisca el dit per girar la comitiva</span></p>
+</main>
+
+<script>
+// ===== palette & 16x16 sprites (facing right / front) =====
+const PAL={k:'#1a1410',w:'#f3efe4',W:'#c8c0ae',p:'#f2c49b',P:'#c98e6a',r:'#d0392b',R:'#7e1f17',
+  s:'#d4d8de',S:'#8b92a0',z:'#4e5564',y:'#f0c040',Y:'#b8862a',f:'#ffe066',u:'#e8be4f',o:'#d9632b',
+  m:'#ec8fb0',M:'#b85a80',v:'#7a44a0',V:'#4a2a66',h:'#6b3f22',b:'#9a6a3a',B:'#5e3d20',
+  g:'#5aa83c',G:'#2f6a26',l:'#a8d86a',a:'#8a9a3a',A:'#4f5a1e',c:'#4a78c8',n:'#2e2e40',N:'#17171f',
+  e:'#9a9aa2',E:'#5f5f68',q:'#8ff4ff'};
+const SPR={
+  jordi:['......rr........','.....rrR......s.','.....ssssss...s.','....ssssssss..s.','....sppppppS..s.','....spkppkpS..s.','....sppppppS..s.','.....sPppPs...s.',
+    '...zwwwrrwwwz.s.','..zzwwwrrwwwzzs.','..zzrrrrrrrrzyyy','..pzwwwrrwwwzpB.','....wwwrrwww....','....SSS..SSS....','....SS....SS....','...zzz....zzz...'],
+  princesa:['................','.....y.yy.y.....','.....yyyyyy.....','....uuuuuuuu....','...uuppppppuu...','...upkppppkpu...','...upmppppmpu...','...uuPppppPuu...',
+    '...uummmmmmuu.rr','...ummMmmMmmu.rR','...ummmmmmmmupl.','...mmMmmmmMmm...','..mmmmmmmmmmmm..','..mMmmmmmmmmMm..','.mmmmmmmmmmmmmm.','.MMMMMMMMMMMMMM.'],
+  rei:['................','.....y.yy.y.....','.....yryyry.....','.....yyyyyy.....','....wppppppw....','....pkppppkp....','....wppppppw....','....wwwPPwww...f',
+    '...rwwwwwwwwr..y','..rrrwwwwwwrrr.y','..rvvvvwwvvvvrpy','..rvvvvvvvvvvr.y','..rvvvvyyvvvvr.y','..rvvvvvvvvvvr..','..wnwwwnwwwnww..','...BB......BB...'],
+  pastor:['............BBB.','.....rrrrr..B.B.','....rrrrrrRR..B.','....hhhhhhh...B.','....hppppph...B.','....pkpppkp...B.','....ppppppp...B.','....hhPPPhh...B.',
+    '...wwwwwwwww..B.','..wwwgggggwww.B.','..pwwgggggwwppB.','...wwgggggww..B.','....ggrrrgg...B.','....bbb.bbb...B.','....bb...bb...B.','...BBB...BBB..B.'],
+  ballester:['................','......ssss......','.....ssssss.....','...SSSSSSSSSS...','.....pppppp.....','.....pkppkp.....','.....pppppp.....','......pPPp......',
+    '...zyryryryrz..b','..zzyryryryrzz.b','..pzyryryryrBBBB','...zyryryryrz..b','...zyryryryrz..b','....SSS..SSS....','....nn....nn....','...BBB....BBB...'],
+  soler:['..............q.','.....zzzzzz...q.','....zSSSSSSz..q.','....zSkkkkSz..q.','....zSSSSSSz..q.','....zSSkkSSz..q.','.....zSSSSz...q.','......zzzz....q.',
+    '...zcccccccz..q.','..zzcccyccczz.q.','..zzccyyycczzyyy','..p.cccyccc.pB..','....ccccccc.....','....SSS.SSS.....','....SS...SS.....','...zzz...zzz....'],
+  jordina:['..............rr','.....y.yy.y...sr','.....oooooo...s.','....oooooooo..B.','....oppppppo..B.','....opkppkpo..B.','...ooppppppoo.B.','...o.pPppPp.o.B.',
+    '...osssrrssso.B.','..ssssrrrrssssB.','..pSsssrrsssSpB.','...mmmmmmmmmm.B.','...mmMmmmmMmm.B.','....SSS..SSS..B.','....SS....SS..B.','...zzz....zzz.B.'],
+  mer:['................','......pppp......','.....hppppph....','....hpppppph....','....pkppppkp....','....pppppppp....','....pppPPppp....','.....pppppp.....',
+    '...BBbbbbbbBB...','..BbbbbbbbbbbB..','..pbbbbbbbbbbpw.','..BbbbwwwbbbbB.w','..BbbbbwbbbbbBw.','..BbbbbbbbbbbB..','..BbbbbbbbbbbB..','...pp......pp...'],
+  cervantes:['................','................','.....hhhhhh.....','....hhppppph....','....hppppppp....','....ppkppkpp....','....pppppppp....','....phhPPhhp....',
+    '......hhhh......','...wwwwwwwwww...','...wWwWwWwWwW...','...nnnnyynnnnp.w','....nnnyynnnnpw.','....nnnnnnnnn...','....NN....NN....','...NNN....NNN...'],
+  shakespeare:['................','................','......pppp......','.....pppppp.....','....hppppppph...','....hpkpppkph...','....hppppppph...','....hyhPPPhhh...',
+    '.....hhhhhh.....','...wwwwwwwwww...','...wWwWwWwWwW...','...bbbbybbbbbpcc','...bbbbybbbbb.cc','....nnn..nnn....','....nn....nn....','...nnn....nnn...'],
+  captaire:['................','......BBBB......','.....BbbbbB.....','....BbBBBBbB....','....BbfPPfbB....','....BbPPPPbB....','....BbwwwwbB....','....BbbwwbbB....',
+    '...BbbbbbbbbB..b','...BbbbbbbbbB..b','..pBbbbbbbbbBp.b','...BbbbbbbbbB..b','...BbbbbbbbbB..b','...BbbbbbbbbB..b','...BBBBBBBBBB..b','....pp...pp....b'],
+  drac:['................','...........gg...','..G.......gggg..','..GG.....ggkggg.','..GGG....ggggggg','..GGGG...gggwww.','..GGGGG.ggg.....','.GGGGGGgggg.....',
+    'GGGGGGggggg.....','....ggglllgg....','...gggllllggg...','gg.gggllllggg...','.ggg.ggg.ggg....','..g..gg...gg....','.....ww...ww....','................'],
+  bat:['................','................','................','................','.V....v...v....V','.VV...vvvvv...VV','.VVV..vfvfv..VVV','.VVVVVvvvvvVVVVV',
+    '..VVVVvvvvvVVVV.','...VV..vwv...VV.','................','................','................','................','................','................'],
+  bat2:['................','................','................','................','......v...v.....','......vvvvv.....','......vfvfv.....','...VVVvvvvvVVV..',
+    '..VVVVvvvvvVVVV.','.VVVV..vwv..VVVV','.VV..........VV.','.V............V.','................','................','................','................'],
+  serp:['................','................','................','................','................','................','..........aaa...','.........aaaka..',
+    '.........aaaaarr','..aaa....aaa....','.aAAAa..aaa.....','aa...aaaaaA.....','aa....AaaaA.....','.aaaaaaaa.......','................','................'],
+  llop:['................','................','................','...........E.E..','..........EeeE..','..........ekeeE.','.........eeeeeek','E.......eeeeeww.',
+    'EE..eeeeeeeee...','.EEeeeeeeeeee...','...eeeWWWWeee...','...ee.ee..ee.ee.','...ee.ee..ee.ee.','...EE.EE..EE.EE.','................','................'],
+  granota:['................','................','................','................','................','..gwkg....gwkg..','..gggggggggggg..','.gggggggggggggg.',
+    '.ggGGGGGGGGGGgg.','..gllllllllllg..','.gg.llllllll.gg.','ggg..........ggg','................','................','................','................'],
+  colom:['................','................','................','................','................','..........ee....','.........eeke...','.........eeeyy..',
+    '.........GG.....','.eeeeeeeeGG.....','EEeeeEEEeeee....','.EEeeeeeeeee....','....eeeeeee.....','.......r..r.....','................','................'],
+  gavina:['................','................','................','................','................','..........ww....','.........wwkw...','.........wwwyy..',
+    '.........ww.....','.wwwwwwwwww.....','SSSSSSSwwwww....','.kSSSSSwwwww....','....wwwwwww.....','.......y..y.....','................','................'],
+  rosa:['................','................','......rrr.......','.....rrRrr......','....rrRRRrr.....','....rRrrrRr.....','.....rrRrr......','......rrr.......',
+    '.......g........','....gg.g........','...ggggg........','.......g.gg.....','.......gggg.....','.......g........','.......g........','................'],
+  llibre:['................','................','................','................','....RRRRRRRRR...','...RrrrrrrrrRw..','...RryyyyyyrRw..','...RrrrrrrrrRw..',
+    '...RrryyyyrrRw..','...RrrrrrrrrRw..','...RrrrrrrrrRw..','...RRRRRRRRRRw..','....wwwwwwwwww..','................','................','................'],
+  ovella:['................','................','................','................','................','...wwwwww.......','..wwwwwwwwnn....','.wwwwwwwwwnwn...',
+    '.WwwwwwwwwWnn...','..wwwwwwwww.....','..n.n...n.n.....','..n.n...n.n.....','................','................','................','................'],
+  diable:['................','....R......R....','....Rr....rR....','.....rrrrrr.....','....rrrrrrrr....','....rpkppkpr....','....rppPPppr....','.....rppppr.....',
+    '...nnrrrrrrnn..f','..nnnRrrrrRnnnfy','..pnnrrrrrrnnpB.','...nnRrrrrRnn.B.','....rrr..rrr..B.','....nnn..nnn..B.','....nn....nn..B.','...NNN....NNN.B.'],
+  mulassa:['................','..........B.B...','..........bbb...','.........bbkbb..','.........bbbbbb.','........bbb.bbbf','.......bbb...yo.','..bbbbbbbb......',
+    '.BryryryryB.....','BBryryryryB.....','B.ryryryryB.....','B.rrrrrrrrB.....','..bb.bb..bb.....','..bb.bb..bb.....','..bb..bb..bb....','..kk..kk..kk....'],
+  guita:['...........ggG..','..........gggkg.','..........ggggrr','..........gggwwf','.........ggg....','........ggg.....','.......ggg......','......ggg.......',
+    '.GGGGgggg.......','GGgggggggg......','G.gyrgyrgg......','G.gggggggg......','..gg.gg.gg......','..gg.gg.gg......','..GG.GG.GG......','................'],
+  cucafera:['................','................','................','.....GGGGG......','...GGyGGyGG.....','..GyGGyGGyGG..gg','.GGGyGGyGGGG.gkg','.GyGGyGGyGGyGggg',
+    'yyyyyyyyyyyyggrr','.ggg.....ggg....','.gg.......gg....','.ww.......ww....','................','................','................','................'],
+};
+const TILES={
+  arbre:['................','......gggg......','....gglllggg....','...gglllgggggg..','..ggllggggggGgg.','..gglgggggggGGg.','.gggggggggGgGGgg','.ggggggggggGGGGg',
+    '..gggggggGgGGGg.','..GgggGgGGGGGG..','...GGGGGGGGGG...','.....GGbbGG.....','.......bb.......','.......bB.......','......bbBB......','................'],
+  roca:['................','................','................','................','................','.....eeeee......','...eeWWeeeeE....','..eeWWeeeeeEE...',
+    '..eeWeeeeeeEEE..','.eeeeeeeeeEEEE..','.eeeeeeeeEEEEEE.','.EeeeeeeEEEEEEE.','..EEEEEEEEEEEE..','................','................','................'],
+  canya:['................','................','....B.....B.....','....B..B..B.....','....g..B..g..B..','..g.g..g..g..B..','..g.g..g.gg..g..','..g.gg.g.g...g..',
+    '...gg..gg...gg..','...g..gg.g..g...','..ggg.g..gg.gg..','..g.ggg.gg.gg...','...gggggggggg...','................','................','................'],
+  parada:['................','rryyrryyrryyrryy','rryyrryyrryyrryy','.r.y.r.y.r.y.r.y','.B............B.','.B............B.','.B............B.','.BcrygcmrcyBgrB.',
+    '.BcrygcmrcyrgcB.','bbbbbbbbbbbbbbbb','BBBBBBBBBBBBBBBB','.B............B.','.B............B.','.B............B.','................','................'],
+  columna:['................','...WWWWWWWWWW...','....wwwwwwww....','.....wWwwWw.....','.....wWwwWw.....','.....wWwwWw.....','.....wWwwWw.....','.....wWwwWw.....',
+    '.....wWwwWw.....','.....wWwwWw.....','.....wWwwWw.....','.....wWwwWw.....','.....wWwwWw.....','....wwwwwwww....','...WWWWWWWWWW...','................'],
+};
+const DRAGONS={
+  dragonet:{g:'#8aa83a',G:'#4f6a24',l:'#e0d890'}, montblanc:{g:'#3f9a4a',G:'#1f5a2a',l:'#d8d070'},
+  vilardell:{g:'#6a4a8a',G:'#352050',l:'#c0a8e0'}, vibria:{g:'#2a8a8a',G:'#164448',l:'#f0c060'},
+  banyoles:{g:'#3a70b0',G:'#1c3a68',l:'#a0d8f0'}, vege:{g:'#8ad05a',G:'#4f9a3a',l:'#f8eaa8'},
+  vilafranca:{g:'#3f8a3a',G:'#a8322a',l:'#f0c040'},
+};
+
+// ===== characters =====
+const HEROES={
+  jordi:{name:'Sant Jordi',role:'Espasa, cos a cos',hp:14,range:1.5,dmg:4,cd:520},
+  princesa:{name:'La Princesa',role:'Roses i guariment',hp:7,range:3.5,dmg:1,cd:650,shot:'#ec8fb0',heal:3500},
+  rei:{name:'El Rei',role:"Ceptre d'or",hp:9,range:4,dmg:3,cd:950,shot:'#ffe066'},
+  pastor:{name:'El Pastor',role:'Fona ràpida',hp:6,range:5,dmg:1,cd:330,shot:'#d9d4c4'},
+  ballester:{name:'El Ballester',role:'Ballesta llarga',hp:9,range:6.5,dmg:4,cd:1150,shot:'#c08a4a'},
+  soler:{name:'Soler de Vilardell',role:'Espasa de virtut',hp:12,range:1.5,dmg:7,cd:700},
+  jordina:{name:'Santa Jordina',role:'Llança llarga',hp:12,range:2.3,dmg:3,cd:420},
+  mer:{name:'Sant Mer',role:'Lliga les bèsties',hp:8,range:4,dmg:1,cd:900,shot:'#f3efe4',stun:1400},
+  cervantes:{name:'Cervantes',role:'Ploma afilada',hp:7,range:5,dmg:2,cd:480,shot:'#f3efe4'},
+  shakespeare:{name:'Shakespeare',role:'Ser o no ser (àrea)',hp:7,range:2.6,dmg:2,cd:1400,aoe:'#c9a8ff'},
+  mulassa:{name:'La Mulassa',role:'Carretilles (àrea)',hp:16,range:2.5,dmg:2,cd:1100,aoe:'#ffb02a'},
+  cucafera:{name:'La Cucafera',role:'Coll llarg, mossega',hp:22,range:2.6,dmg:4,cd:900},
+  guita:{name:'La Guita Xica',role:'Foc boig (àrea)',hp:14,range:2,dmg:2,cd:650,aoe:'#ff6a2a'},
+  dracvila:{name:'El Drac de Vilafranca',role:'Ball de foc (àrea)',hp:20,range:3,dmg:3,cd:1300,aoe:'#ff8a2a',spr:'drac_vilafranca'},
+  vege:{name:'El Drac Vegetarià',role:'Foc amic (àrea)',hp:20,range:3,dmg:3,cd:1500,aoe:'#ff8a2a',spr:'drac_vege'},
+};
+const FOES={
+  serp:{name:'Serp',role:'Lenta',spr:'serp',hp:3,dmg:1,move:620,cd:900,pts:10},
+  ratpenat:{name:'Ratpenat',role:'Vola i va boig',spr:'bat',hp:2,dmg:1,move:260,cd:750,pts:15,erratic:.45,fly:1},
+  llop:{name:'Llop',role:'Ràpid',spr:'llop',hp:6,dmg:2,move:330,cd:900,pts:25},
+  granota:{name:'Granota',role:'Salta de dos en dos',spr:'granota',hp:4,dmg:1,move:700,cd:800,pts:15,hop:2},
+  dragonet:{name:'Dragonet',role:'Mossega fort',spr:'drac_dragonet',hp:9,dmg:2,move:520,cd:1000,pts:30},
+  colom:{name:'Colom',role:'Picoteja',spr:'colom',hp:2,dmg:1,move:300,cd:700,pts:10,erratic:.5,fly:1},
+  gavina:{name:'Gavina',role:'Ràpida i pesada',spr:'gavina',hp:4,dmg:2,move:240,cd:900,pts:20,erratic:.25,fly:1},
+  diable:{name:'Diable',role:'Escup espurnes',spr:'diable',hp:5,dmg:1,move:400,cd:900,pts:20,fire:3400,spread:1,shot:'#ffd23f',shotSpeed:4.5},
+  // festival beasts: big, never die, join the party when their gunpowder runs out
+  mulassa:{name:'La Mulassa de Reus',role:'1725 · Embesteix',spr:'mulassa',size:2,big:1,hp:80,dmg:2,move:450,cd:900,pts:300,fire:2800,spread:3,shot:'#ffb02a',rage:{every:5000,dur:1300,move:140},friend:1,ally:'mulassa',bar:'pólvora'},
+  cucafera:{name:'La Cucafera de Tortosa',role:'Segle XVI · Llança flors',spr:'cucafera',size:2,big:1,hp:120,dmg:3,move:950,cd:1100,pts:350,reach:2.6,fire:3400,spread:5,shot:'#ec8fb0',friend:1,ally:'cucafera',bar:'pólvora'},
+  guita:{name:'La Guita Xica de Berga',role:'1890 · Va boja',spr:'guita',size:2,big:1,hp:100,dmg:2,move:300,cd:800,pts:350,erratic:.3,fire:2200,spread:2,shot:'#ff6a2a',friend:1,ally:'guita',bar:'pólvora'},
+};
+const ITEMS={
+  rosa:{name:'Rosa',role:'Cura +3'}, ovella:{name:'Ovella',role:'Salva-la: +50'},
+  captaire:{name:'El Captaire',role:'Espasa de virtut: dany x2'}, llibre:{name:'Llibre',role:'+100 punts'},
+};
+const LEVELS=[
+  {place:'Montblanc',title:"L'estany del drac",hint:'Allibera la princesa',song:'calm',
+   story:"Un drac viu a l'estany de Montblanc. Primer el poble li donava ovelles; quan se'n van acabar, van fer un sorteig i va sortir el nom de la princesa. El rei havia dit que la seva filla no valia més que la de ningú, i l'ha hagut de deixar anar. Sant Jordi arriba just a temps.",
+   heroes:['princesa','rei','pastor'],foes:['serp','ratpenat','dragonet'],extra:'ovella',
+   ground:['#b49a5c','#ad9455','#86803e',['#d0392b','#f3efe4']],tree:{g:'#8a9a5a',l:'#b8c47c',G:'#5a673a'},
+   boss:{name:"El Drac de l'estany",role:'Escup foc',sub:"Ha sortit de l'estany",spr:'drac_montblanc',hp:110,dmg:3,move:850,cd:1100,pts:500,fire:2400,spread:1,shot:'#ff8a2a'},
+   build:g=>{g.lake(.72,.5,.12,.26);g.scatter('arbre',7)}},
+  {place:'Sant Celoni',title:'La Roca del Drac',hint:'Busca el captaire',song:'calm',
+   story:"Vora la Tordera, un drac surt de la Roca del Drac i espanta tot el Vallès. Un captaire misteriós regala al cavaller Soler de Vilardell una espasa de virtut. Aquella espasa va existir de debò: el 1274 el rei Jaume I va anul·lar un combat perquè el guanyador la duia.",
+   heroes:['ballester','soler'],foes:['serp','llop','dragonet'],extra:'captaire',
+   ground:['#86a24e','#7f9a48','#5b7a32',['#f0c040','#f3efe4']],tree:{g:'#3f7a3a',l:'#6aa050',G:'#24502a'},
+   boss:{name:'El Drac de Vilardell',role:'Escup verí en ventall',sub:'Surt de la Roca del Drac',spr:'drac_vilardell',hp:170,dmg:3,move:800,cd:1000,pts:700,fire:3000,spread:3,shot:'#8ae04a'},
+   build:g=>{g.river(.6);g.cluster('roca',.27,.22,5);g.scatter('arbre',6)}},
+  {place:'Sant Llorenç del Munt',title:'La cova de la Brívia',hint:"Santa Jordina t'espera",song:'calm',
+   story:"Entre les roques de la Mola hi viu la víbria, que la gent del Vallès anomena Brívia: una bèstia alada encara més ferotge que un drac. Molts dels dracs de les nostres festes vénen d'aquesta llegenda. Aquí s'hi apunta Santa Jordina, la princesa que no vol que la rescatin.",
+   heroes:['jordina'],foes:['ratpenat','llop','dragonet'],extra:'captaire',
+   ground:['#b9805a','#b07852','#7d6a3a',['#e8d0a0','#f3efe4']],tree:{g:'#2f6a3a',l:'#4f8f4a',G:'#1d4426'},rock:{e:'#b0694a',E:'#74402c',W:'#d8a07c'},
+   boss:{name:'La Brívia',role:'Es torna boja i corre',sub:'Baixa volant de la Mola',spr:'drac_vibria',hp:220,dmg:4,move:700,cd:950,pts:900,fire:2600,spread:2,shot:'#ffb02a',rage:{every:4500,dur:1400,move:150}},
+   build:g=>{g.scatter('roca',14);g.scatter('arbre',6)}},
+  {place:'Banyoles',title:"L'estany de Banyoles",hint:'Allibera Sant Mer',song:'calm',
+   story:"El drac de l'estany neda, vola, camina i canvia de mida: tan aviat és gegant com petit com un gos. Sant Mer el va amansir i el va dur lligat amb una corda fins al poble. Diu la llegenda que després en van fer botifarres.",
+   heroes:['mer'],foes:['granota','serp','ratpenat','dragonet'],extra:'captaire',
+   ground:['#6f9a58','#689252','#4d7a3c',['#b07ad8','#f3efe4']],tree:{g:'#3f7a3a',l:'#6aa050',G:'#24502a'},
+   boss:{name:'El Drac de Banyoles',role:'Canvia de mida',sub:'Ara gegant, ara petit',spr:'drac_banyoles',hp:280,dmg:4,move:800,cd:1000,pts:1100,fire:2800,spread:3,shot:'#5ad0ff',shrink:5000},
+   build:g=>{g.lake(.64,.45,.15,.3);g.ring('canya',.64,.45,.15,.3,8);g.scatter('arbre',4)}},
+  {place:'Festa Major',title:'Correfoc i bestiari',hint:"No les mates: esgota'ls la pólvora",song:'correfoc',night:1,
+   story:"És nit de Festa Major i s'hi ha aplegat bestiari de tot el país: la Mulassa de Reus (1725), la Cucafera de Tortosa (documentada al segle XVI), la Guita Xica de la Patum de Berga (1890) i el Drac de Vilafranca, que fa més de 400 anys que balla entre petards. Amb tant de soroll s'han esverat. No els facis mal: quan se'ls acabi la pólvora, s'uniran a la comitiva.",
+   heroes:[],foes:['diable','ratpenat','diable'],beasts:['mulassa','cucafera','guita'],extra:'captaire',
+   ground:'llambordes',
+   boss:{name:'El Drac de Vilafranca',role:'Foc i carretilles',sub:'Comença el ball del drac',spr:'drac_vilafranca',hp:260,dmg:3,move:750,cd:1000,pts:1200,fire:2200,spread:3,radial:12,shot:'#ffb02a',friend:1,ally:'dracvila',bar:'pólvora'},
+   build:g=>{g.rows('columna');g.lake(.62,.3,.05,.09)}},
+  {place:'Barcelona',title:"La Rambla, 23 d'abril",hint:'Llibres i roses',song:'rambla',
+   story:"Conte desexplicat. Cervantes i Shakespeare van morir per aquestes dates de 1616, i per això avui la Rambla és plena de llibres i roses. Tots dos s'apunten a la comitiva. El drac d'aquí no vol princeses: és vegetarià i té molta gana. Alimenta'l fins que s'atipi.",
+   heroes:['cervantes','shakespeare'],foes:['colom','colom','gavina'],extra:'llibre',
+   ground:'panot',tree:{g:'#5aa040',l:'#8ccf5a',G:'#3a7030'},
+   boss:{name:'El Drac Vegetarià',role:"No mor: s'atipa",sub:'Té gana de roses',spr:'drac_vege',hp:380,dmg:2,move:700,cd:1000,pts:1500,fire:2200,spread:3,shot:'#5abf3a',friend:1,ally:'vege',final:1,bar:'gana'},
+   build:g=>{g.rows('arbre');g.scatter('parada',5)}},
+];
+const DEATH={aigua:"Has caigut a l'aigua.",roca:'Has topat amb una roca.',arbre:'Has topat amb un arbre.',canya:"T'has embolicat amb les canyes.",parada:'Has tombat una parada de llibres.',columna:'Has topat amb una columna.'};
+const ROMAN=['I','II','III','IV','V','VI'];
+
+// ===== helpers & sprite baking =====
+const $=id=>document.getElementById(id);
+const cv=$('cv'),ctx=cv.getContext('2d'),stage=$('stage');
+const rand=n=>Math.random()*n|0,pick=a=>a[rand(a.length)],L=(a,b,t)=>a+(b-a)*t,clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const hash=(x,y)=>{const h=Math.sin(x*127.1+y*311.7)*43758.5453;return h-Math.floor(h)};
+const key=(x,y)=>y*64+x;
+
+// 16x16 rows -> 18x18 canvas with a 1px dark outline
+function bake(rows,col,outline=true){
+  const c=document.createElement('canvas');c.width=c.height=18;const x=c.getContext('2d');
+  const on=(i,j)=>rows[j]?.[i]&&rows[j][i]!=='.';
+  if(outline){x.fillStyle=PAL.k;for(let j=-1;j<17;j++)for(let i=-1;i<17;i++)
+    if(!on(i,j)&&(on(i+1,j)||on(i-1,j)||on(i,j+1)||on(i,j-1)))x.fillRect(i+1,j+1,1,1)}
+  rows.forEach((r,j)=>[...r].forEach((ch,i)=>{if(ch!=='.'){x.fillStyle=col(ch);x.fillRect(i+1,j+1,1,1)}}));
+  return c;
+}
+const SP={};
+const mk=(rows,map={})=>({n:bake(rows,c=>map[c]||PAL[c]),f:bake(rows,()=>'#fff'),res:16});
+for(const k in SPR)SP[k]=mk(SPR[k]);
+for(const k in DRAGONS)SP['drac_'+k]=mk(k==='vege'?['..........rRr...',...SPR.drac.slice(1)]:SPR.drac,DRAGONS[k]);
+const sprOf=t=>HEROES[t]?.spr||t;
+
+// generated pixel art (see art/): replaces the hand-drawn sprite as soon as each PNG loads. '*' = also has a 64 px version for 2x2 tiles
+const ART={jordi:'jordi',princesa:'princesa',rei:'rei',pastor:'pastor',ballester:'ballester',soler:'soler',jordina:'jordina',mer:'mer',
+  cervantes:'cervantes',shakespeare:'shakespeare',captaire:'captaire',serp:'serp',bat:'ratpenat',llop:'llop',granota:'granota',colom:'colom',
+  gavina:'gavina',diable:'diable',drac_dragonet:'dragonet',rosa:'rosa',llibre:'llibre',ovella:'ovella',
+  drac_montblanc:'drac-montblanc*',drac_vilardell:'drac-vilardell*',drac_vibria:'brivia*',drac_banyoles:'drac-banyoles*',
+  drac_vege:'drac-vege*',drac_vilafranca:'drac-vilafranca*',mulassa:'mulassa*',cucafera:'cucafera*',guita:'guita*'};
+function bakeImg(img){
+  const r=img.width,canvas=()=>{const c=document.createElement('canvas');c.width=c.height=r+2;return c};
+  // 1px dark outline: the silhouette stamped in four directions and tinted, with the sprite on top
+  const sil=canvas(),s=sil.getContext('2d');
+  for(const[dx,dy]of[[0,1],[2,1],[1,0],[1,2]])s.drawImage(img,dx,dy);
+  s.globalCompositeOperation='source-in';s.fillStyle=PAL.k;s.fillRect(0,0,r+2,r+2);
+  const n=canvas(),nx=n.getContext('2d');nx.drawImage(sil,0,0);nx.drawImage(img,1,1);
+  const f=canvas(),fx=f.getContext('2d');fx.drawImage(img,1,1);
+  fx.globalCompositeOperation='source-in';fx.fillStyle='#fff';fx.fillRect(0,0,r+2,r+2);
+  fx.globalCompositeOperation='destination-over';fx.drawImage(sil,0,0);
+  return{n,f,res:r};
+}
+function loadArt(src,done){const i=new Image();i.onload=()=>{done(bakeImg(i));paintMinis(document)};i.src=src}
+for(const[k,v]of Object.entries(ART)){
+  const slug=v.replace('*','');
+  loadArt(`sprites/${slug}.png`,e=>SP[k]={...e,big:SP[k].big});
+  if(v.endsWith('*'))loadArt(`sprites/${slug}@64.png`,e=>SP[k].big=e);
+}
+function paintMinis(root){root.querySelectorAll('canvas[data-spr]').forEach(c=>{
+  const tight=c.closest('.tight'),e=!tight&&SP[c.dataset.spr].big||SP[c.dataset.spr],k=tight?(e.res<=16?2:1):(e.res<=16?3:e.res<=32?2:1);
+  c.width=c.height=e.res+2;c.style.width=c.style.height=(e.res+2)*k+'px';c.getContext('2d').drawImage(e.n,0,0);
+})}
+const chip=(spr,name,role)=>`<li><canvas class="spr" data-spr="${spr}"></canvas><b>${name}</b>${role?`<small>${role}</small>`:''}</li>`;
+
+// ===== audio (WebAudio synth, no files) =====
+const AU={ctx:null,on:true};
+try{AU.on=localStorage.getItem('gesta-so')!=='0'}catch{}
+function audio(){
+  if(!AU.ctx){
+    const C=window.AudioContext||window.webkitAudioContext;if(!C)return;
+    AU.ctx=new C();AU.master=AU.ctx.createGain();AU.master.gain.value=AU.on?.6:0;AU.master.connect(AU.ctx.destination);
+    AU.music=AU.ctx.createGain();AU.music.gain.value=.5;AU.music.connect(AU.master);
+    const n=AU.ctx.sampleRate;AU.noise=AU.ctx.createBuffer(1,n,n);const d=AU.noise.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
+  }
+  AU.ctx.resume?.();
+}
+function tone(f,d,type='square',vol=.1,slide=1,when=0,dest){
+  const c=AU.ctx;if(!c)return;const t=c.currentTime+when,o=c.createOscillator(),g=c.createGain();
+  o.type=type;o.frequency.setValueAtTime(f,t);if(slide!==1)o.frequency.exponentialRampToValueAtTime(Math.max(30,f*slide),t+d);
+  g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(dest||AU.master);o.start(t);o.stop(t+d+.02);
+}
+function noise(d,vol=.1,freq=1000,when=0,dest){
+  const c=AU.ctx;if(!c)return;const t=c.currentTime+when,s=c.createBufferSource(),fl=c.createBiquadFilter(),g=c.createGain();
+  s.buffer=AU.noise;fl.type='bandpass';fl.frequency.value=freq;g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+d);
+  s.connect(fl).connect(g).connect(dest||AU.master);s.start(t);s.stop(t+d+.02);
+}
+const arp=(notes,step,type,vol)=>notes.forEach((f,i)=>tone(f,step*1.6,type,vol,1,i*step));
+const SFX={
+  shot:()=>tone(900,.05,'square',.03,1.6),
+  melee:()=>noise(.07,.12,2600),
+  aoe:()=>{noise(.25,.1,500);tone(300,.25,'triangle',.08,.5)},
+  hit:()=>tone(240,.05,'square',.04,.6),
+  kill:()=>{tone(523,.06,'square',.06);tone(784,.08,'square',.06,1,.05)},
+  hurt:()=>tone(150,.16,'sawtooth',.1,.5),
+  death:()=>{tone(392,.2,'triangle',.16,.5);tone(196,.35,'triangle',.16,.5,.15)},
+  join:()=>arp([523,659,784,1047],.07,'square',.07),
+  rose:()=>arp([784,988,1175],.05,'triangle',.12),
+  coin:()=>{tone(988,.06,'square',.06);tone(1319,.12,'square',.06,1,.06)},
+  power:()=>arp([392,523,659,784,1047,1319],.05,'square',.06),
+  roar:()=>{noise(.9,.25,250);tone(90,.9,'sawtooth',.14,.55)},
+  fire:()=>noise(.3,.1,700),
+  wave:()=>{tone(587,.14,'square',.06);tone(880,.24,'square',.06,1,.14)},
+  bossdie:()=>{noise(1.2,.25,180);arp([262,330,392,523,659,784],.09,'square',.07)},
+  over:()=>arp([392,349,311,262],.25,'triangle',.14),
+  win:()=>arp([523,659,784,659,784,1047,1319],.11,'square',.07),
+  petard:()=>noise(.06,.07,2600),
+};
+const lastSfx={};
+function sfx(n){const t=performance.now();if(!AU.ctx||t-(lastSfx[n]||0)<45)return;lastSfx[n]=t;SFX[n]()}
+// music: 8th-note steps, MIDI notes, 0 = rest
+const SONGS={
+  calm:{bpm:132,lead:[62,0,65,67,69,0,67,65,64,0,62,0,60,62,64,0,62,0,65,67,69,0,72,71,69,67,65,64,62,0,0,0],
+        bass:[38,0,0,0,38,0,45,0,36,0,0,0,36,0,43,0,38,0,0,0,38,0,45,0,41,0,43,0,38,0,45,0]},
+  boss:{bpm:160,lead:[62,0,63,62,60,0,58,0,57,0,58,60,62,0,0,0,62,0,65,63,62,60,58,57,58,0,57,0,55,0,0,0],
+        bass:[38,0,38,0,38,0,39,0,38,0,38,0,36,0,36,0,34,0,34,0,34,0,36,0,38,0,38,0,37,0,37,0]},
+  rambla:{bpm:140,lead:[62,0,66,69,71,69,66,0,64,0,67,71,69,0,0,0,62,0,66,69,74,0,71,69,67,66,64,66,62,0,0,0],
+        bass:[38,0,45,0,38,0,45,0,40,0,47,0,45,0,40,0,38,0,45,0,43,0,47,0,45,0,40,0,38,0,45,0]},
+  // gralla over the Patum tabal: "pa-TUM"
+  correfoc:{bpm:120,leadType:'sawtooth',drum:'patum',lead:[69,0,71,69,67,0,69,0,72,0,71,69,67,0,0,0,69,0,71,72,74,0,72,71,69,0,67,0,69,0,0,0],
+        bass:[38,0,0,0,0,0,0,0,38,0,0,0,0,0,0,0,36,0,0,0,0,0,0,0,38,0,0,0,0,0,0,0]},
+};
+const MUS={song:null,step:0,next:0};
+const mtof=m=>440*2**((m-69)/12);
+function music(name){if(MUS.song!==name){MUS.song=name;MUS.step=0;MUS.next=0}}
+setInterval(()=>{
+  const c=AU.ctx;if(!c||!MUS.song||!S||S.mode!=='play'||S.paused)return;
+  const sg=SONGS[MUS.song],dur=60/sg.bpm/2;
+  if(MUS.next<c.currentTime)MUS.next=c.currentTime+.03;
+  while(MUS.next<c.currentTime+.15){
+    const i=MUS.step%sg.lead.length,w=MUS.next-c.currentTime;
+    if(sg.lead[i])tone(mtof(sg.lead[i]),dur*.9,sg.leadType||'square',sg.leadType?.022:.035,1,w,AU.music);
+    if(sg.bass[i])tone(mtof(sg.bass[i]),dur*1.8,'triangle',.12,1,w,AU.music);
+    if(sg.drum==='patum'){if(i%4===3)noise(.05,.08,1600,w,AU.music);else if(i%4===0){noise(.2,.2,90,w,AU.music);tone(65,.2,'sine',.22,.7,w,AU.music)}}
+    else if(i%4===0)noise(.09,.1,140,w,AU.music);else if(i%4===2)noise(.03,.035,5000,w,AU.music);
+    MUS.step++;MUS.next+=dur;
+  }
+},25);
+
+// ===== grid, level & background =====
+let COLS=24,ROWS=14,T=32,bg,S,best=0,OB=new Map(),WATER=[];
+try{best=+localStorage.getItem('gesta-sant-jordi-best')||0}catch{}
+
+function pickGrid(){
+  const dpr=devicePixelRatio||1,r=stage.getBoundingClientRect(),W=(r.width-24)*dpr,H=(r.height-24)*dpr;
+  const t=Math.max(32,Math.round(Math.max(W,H)/24/32)*32);
+  COLS=clamp(Math.floor(W/t),11,28);ROWS=clamp(Math.floor(H/t),9,20);
+}
+function fit(){
+  const dpr=devicePixelRatio||1,r=stage.getBoundingClientRect();
+  // tile = multiple of 32 device px, so each sprite pixel is a whole number of pixels (16 on very small screens)
+  const fitT=Math.min((r.width-24)*dpr/COLS,(r.height-24)*dpr/ROWS);
+  T=fitT>=32?Math.floor(fitT/32)*32:Math.max(16,Math.floor(fitT/16)*16);
+  cv.width=COLS*T;cv.height=ROWS*T;cv.style.width=cv.width/dpr+'px';cv.style.height=cv.height/dpr+'px';
+  ctx.imageSmoothingEnabled=false;if(S)bakeBg();
+}
+const isBlock=(x,y)=>{const t=OB.get(key(x,y));return t&&t!=='pont'?t:null};
+function walkable(x,y,s,fly){
+  if(x<0||y<0||x+s>COLS||y+s>ROWS)return false;
+  if(!fly)for(let j=0;j<s;j++)for(let i=0;i<s;i++)if(isBlock(x+i,y+j))return false;
+  return true;
+}
+function buildLevel(i){
+  let seed=i*7919+COLS*31+ROWS;const rnd=()=>(seed=seed*16807%2147483647)/2147483647;
+  OB=new Map();const set=(x,y,t)=>{if(x>=0&&y>=0&&x<COLS&&y<ROWS)OB.set(key(x,y),t)};
+  LEVELS[i].build({
+    lake(cx,cy,rx,ry){for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){const dx=((x+.5)/COLS-cx)/rx,dy=((y+.5)/ROWS-cy)/ry;if(dx*dx+dy*dy<=1)set(x,y,'aigua')}},
+    ring(t,cx,cy,rx,ry,n){for(let k=0;k<n;k++){const a=rnd()*6.28,x=Math.floor((cx+Math.cos(a)*rx*1.25)*COLS),y=Math.floor((cy+Math.sin(a)*ry*1.2)*ROWS);if(!OB.has(key(x,y)))set(x,y,t)}},
+    river(fx){const x0=Math.floor(fx*COLS),b=[Math.floor(ROWS*.25),Math.floor(ROWS*.75)];for(let y=0;y<ROWS;y++)set(x0,y,b.includes(y)?'pont':'aigua')},
+    scatter(t,n){for(let k=0,tr=0;k<n&&tr<300;tr++){const x=Math.floor(rnd()*COLS),y=Math.floor(rnd()*ROWS);if(!OB.has(key(x,y))){set(x,y,t);k++}}},
+    cluster(t,cx,cy,n){for(let k=0;k<n;k++)set(Math.floor(cx*COLS)+Math.floor(rnd()*3)-1,Math.floor(cy*ROWS)+Math.floor(rnd()*3)-1,t)},
+    rows(t){for(let x=2;x<COLS-1;x+=3){set(x,1,t);set(x,ROWS-2,t)}},
+  });
+  const sy=ROWS>>1; // keep the start lane clear
+  for(const k of[...OB.keys()]){const x=k%64,y=k/64|0;if(x<=8&&Math.abs(y-sy)<=1)OB.delete(k)}
+  WATER=[...OB].filter(([,t])=>t==='aigua').map(([k])=>k);
+}
+function bakeBg(){
+  const lv=LEVELS[S.lvl],G=lv.ground,u=T/16;
+  bg=document.createElement('canvas');bg.width=cv.width;bg.height=cv.height;const b=bg.getContext('2d');
+  b.imageSmoothingEnabled=false;
+  const tile={};for(const t in TILES)tile[t]=bake(TILES[t],c=>(t==='arbre'?lv.tree:t==='roca'?lv.rock:null)?.[c]||PAL[c]);
+  const px=(X,Y,x,y,w,h,c)=>{b.fillStyle=c;b.fillRect(X+x*u,Y+y*u,w*u,h*u)};
+  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
+    const X=x*T,Y=y*T,r=hash(x,y);
+    if(G==='panot'){ // Barcelona flower paving
+      px(X,Y,0,0,16,16,'#d6cfbf');px(X,Y,0,0,16,1,'#b3ab98');px(X,Y,0,0,1,16,'#b3ab98');
+      for(const[a,c]of[[3,3],[11,3],[3,11],[11,11]])px(X,Y,a,c,2,2,'#bdb5a2');
+      px(X,Y,7,7,2,2,'#c4bca9');px(X,Y,6,3,4,1,'#c9c1ae');px(X,Y,6,12,4,1,'#c9c1ae');
+    }else if(G==='llambordes'){ // cobbled square
+      px(X,Y,0,0,16,16,'#5f5a54');
+      for(const[a,c]of[[1,1],[9,1],[1,9],[9,9]]){const t=hash(x*2+a,y*2+c);px(X,Y,a,c,6,6,t<.33?'#8f8a80':t<.66?'#9a948a':'#857f76');px(X,Y,a,c,6,1,'#aaa498')}
+    }else{
+      px(X,Y,0,0,16,16,(x+y)%2?G[0]:G[1]);
+      if(r<.18){px(X,Y,5,10,1,3,G[2]);px(X,Y,7,8,1,5,G[2]);px(X,Y,9,10,1,3,G[2])}
+      else if(r<.25){const fc=G[3][r<.215?0:1];px(X,Y,8,8,2,2,fc);px(X,Y,8,10,1,3,G[2]);px(X,Y,3,5,1,1,fc)}
+      else if(r<.32){px(X,Y,3,4,3,2,'rgba(0,0,0,.12)');px(X,Y,11,11,2,1,'rgba(0,0,0,.1)')}
+    }
+  }
+  for(const[k,t]of OB){
+    const x=k%64,y=k/64|0,X=x*T,Y=y*T,h=hash(x,y);
+    if(t==='aigua'||t==='pont'){
+      px(X,Y,0,0,16,16,'#3d6fa8');px(X,Y,2+(h*8|0),4+(h*5|0),4,1,'#5a8ccb');px(X,Y,8-(h*5|0),11,3,1,'#5a8ccb');
+      for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){
+        const nx=x+dx,ny=y+dy,o=OB.get(key(nx,ny));
+        if(nx<0||ny<0||nx>=COLS||ny>=ROWS||o==='aigua'||o==='pont')continue;
+        b.fillStyle='#d6ecf7';b.fillRect(dx>0?X+T-u:X,dy>0?Y+T-u:Y,dx?u:T,dy?u:T);
+      }
+      if(t==='pont'){px(X,Y,0,2,16,12,'#9a6a3a');for(let i=0;i<16;i+=4)px(X,Y,i,2,1,12,'#5e3d20');px(X,Y,0,2,16,1,'#5e3d20');px(X,Y,0,13,16,1,'#5e3d20')}
+    }else{
+      b.fillStyle='rgba(40,25,10,.28)';b.beginPath();b.ellipse(X+T/2,Y+T*.88,T*.4,T*.13,0,0,6.29);b.fill();
+      b.drawImage(tile[t],X-u,Y-u,T+2*u,T+2*u);
+    }
+  }
+}
+
+// ===== game state =====
+const hero=(type,x,y)=>({type,x,y,px:x,py:y,hp:HEROES[type].hp,max:HEROES[type].hp,cd:0,face:1,flash:0});
+const overlap=(o,x,y,s)=>o.x<x+s&&x<o.x+o.size&&o.y<y+s&&y<o.y+o.size;
+const gap=(f,m)=>Math.hypot(Math.max(0,f.x-m.x,m.x-(f.x+f.size-1)),Math.max(0,f.y-m.y,m.y-(f.y+f.size-1)));
+const fpos=f=>{const t=Math.min(1,f.mt/(f.cur||f.move));return{x:L(f.px,f.x,t)+f.size/2,y:L(f.py,f.y,t)+f.size/2}};
+const txt=(x,y,str,color)=>S.fx.push({x,y,str,color,t:0,life:850});
+function burst(x,y,color,n){for(let i=0;i<n;i++){const a=Math.random()*6.28,v=2+Math.random()*3;S.fx.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-2,g:1,color,t:0,life:400+Math.random()*300})}}
+
+function newRun(mode){
+  pickGrid();
+  S={lvl:0,wave:0,party:[hero('jordi',2,ROWS>>1)],dir:{x:1,y:0},queue:[],foes:[],shots:[],fx:[],items:[],spawns:[],
+     score:0,kills:0,acc:0,tick:150,spawnT:0,clearT:0,banner:null,mode,paused:false,power:0,shake:0};
+  buildLevel(0);fit();hud();
+}
+function startLevel(i){
+  S.lvl=i;S.wave=0;buildLevel(i);
+  const x=2,y=ROWS>>1; // the whole party stacks on the start tile and unfurls as it walks
+  for(const m of S.party){m.x=m.px=x;m.y=m.py=y;m.hp=m.max;m.face=1}
+  Object.assign(S,{dir:{x:1,y:0},queue:[],foes:[],shots:[],items:[],spawns:[],acc:0,banner:null,power:0});
+  bakeBg();hud();
+}
+function showChapter(i){
+  startLevel(i);S.mode='chapter';
+  const lv=LEVELS[i];
+  $('ch-eyebrow').textContent=`Capítol ${ROMAN[i]} · ${lv.place}`;$('ch-title').textContent=lv.title;$('ch-story').textContent=lv.story;
+  const bossChip=chip(lv.boss.spr,lv.boss.name,lv.boss.role);
+  $('ch-h-heroes').textContent=lv.beasts?"Bestiari que s'unirà a la comitiva":'Presoners per alliberar';
+  $('ch-heroes').innerHTML=lv.beasts?lv.beasts.map(b=>chip(FOES[b].spr,FOES[b].name,FOES[b].role)).join('')+bossChip
+    :lv.heroes.map(h=>chip(sprOf(h),HEROES[h].name,HEROES[h].role)).join('');
+  $('ch-foes').innerHTML=[...new Set(lv.foes)].map(f=>chip(FOES[f].spr,FOES[f].name,FOES[f].role)).join('')
+    +(lv.beasts?'':bossChip)+chip('rosa',ITEMS.rosa.name,ITEMS.rosa.role)+chip(lv.extra,ITEMS[lv.extra].name,ITEMS[lv.extra].role);
+  paintMinis($('chapter'));
+  $('intro').hidden=true;$('over').hidden=true;$('chapter').hidden=false;$('ch-go').focus();
+}
+function play(){if(S.mode!=='chapter')return;$('chapter').hidden=true;S.mode='play';setPause(false);nextWave()}
+
+function nextWave(){
+  const lv=LEVELS[S.lvl],w=++S.wave,boss=w===4,d=S.lvl*3+w;
+  const n=boss?2+S.lvl:4+S.lvl+w*2;
+  S.spawns=Array.from({length:n},()=>lv.foes[Math.min(lv.foes.length-1,Math.floor(Math.random()**1.5*lv.foes.length))]);
+  if(boss)S.spawns.unshift('boss');else if(lv.beasts)S.spawns.unshift(lv.beasts[w-1]);
+  S.spawnT=1500;S.clearT=0;S.tick=Math.max(85,150-d*3);
+  S.banner=boss?{text:lv.boss.name,sub:lv.boss.sub,t:2600}:{text:'Onada '+w,sub:lv.beasts?FOES[lv.beasts[w-1]].name+" s'ha esverat":w===1?lv.hint:'',t:2200};
+  if(!boss){
+    spawnCaptive();
+    if(lv.extra==='ovella'){spawnItem('ovella');spawnItem('ovella')}
+    if(lv.extra==='captaire'&&w===2)spawnItem('captaire');
+  }
+  music(boss?'boss':lv.song);sfx(boss?'roar':'wave');hud();
+}
+function emptyTile(min){
+  const h=S.party[0];
+  for(let i=0;i<80;i++){
+    const x=1+rand(COLS-2),y=1+rand(ROWS-2);
+    if(OB.has(key(x,y))||Math.abs(x-h.x)+Math.abs(y-h.y)<min||S.party.some(m=>m.x===x&&m.y===y)||S.items.some(o=>o.x===x&&o.y===y)||S.foes.some(f=>overlap(f,x,y,1)))continue;
+    return{x,y};
+  }
+}
+function spawnItem(kind){const p=emptyTile(4);if(p)S.items.push({kind,x:p.x,y:p.y,t:0})}
+function spawnCaptive(){
+  const has=t=>S.party.some(m=>m.type===t)||S.items.some(i=>i.kind===t);
+  let pool=LEVELS[S.lvl].heroes.filter(t=>!has(t));
+  // fallen heroes from earlier chapters can be rescued again
+  if(!pool.length&&Math.random()<.5)pool=LEVELS.slice(0,S.lvl+1).flatMap(l=>l.heroes).concat('jordi').filter(t=>!has(t));
+  if(pool.length)spawnItem(pool[0]);
+}
+function spawnFoe(type){
+  const lv=LEVELS[S.lvl],F=type==='boss'?lv.boss:FOES[type],s=type==='boss'?2:F.size||1,h=S.party[0],d=S.lvl*3+S.wave;
+  for(let i=0;i<40;i++){
+    const side=rand(4);let x=rand(COLS-s+1),y=rand(ROWS-s+1);
+    if(side===0)x=0;else if(side===1)x=COLS-s;else if(side===2)y=0;else y=ROWS-s;
+    if(Math.abs(x-h.x)+Math.abs(y-h.y)<6||!walkable(x,y,s,F.fly)||S.foes.some(o=>overlap(o,x,y,s))||S.party.some(m=>overlap({x,y,size:s},m.x,m.y,1)))continue;
+    const hp=type==='boss'||F.big?F.hp:Math.round(F.hp*(1+d*.1));
+    S.foes.push({type,F,x,y,px:x,py:y,hp,max:hp,size:s,move:F.move,dmg:F.dmg,cd:F.cd,mt:0,ft:F.fire||0,rt:F.rage?.every||0,rage:0,st:F.shrink||0,stun:0,face:x>h.x?-1:1,flash:0});
+    if(s>1)S.shake=400;
+    return true;
+  }
+}
+function drop(kind,x,y){if(x>=0&&y>=0&&x<COLS&&y<ROWS&&!OB.has(key(x,y))&&!S.items.some(i=>i.x===x&&i.y===y))S.items.push({kind,x,y,t:0})}
+
+function hitFoe(f,d){
+  if(f.dead)return;
+  f.hp-=d;f.flash=110;txt(f.x+f.size/2,f.y,'-'+d,'#fff');sfx('hit');
+  if(f.hp>0)return;
+  f.dead=1;S.kills++;S.score+=f.F.pts;
+  if(f.F.friend)return befriend(f);
+  burst(f.x+f.size/2,f.y+f.size/2,f.type==='boss'?'#b8322a':'#2d5f24',f.size*10);
+  if(f.type==='boss'){
+    for(const[a,b]of[[0,0],[1,0],[0,1],[1,1]])drop('rosa',f.x+a,f.y+b);
+    S.banner={text:'Ha caigut!',sub:'De la seva sang neixen roses',t:2400};S.shake=500;sfx('bossdie');spawnCaptive();
+  }else{
+    sfx('kill');const r=Math.random();
+    if(LEVELS[S.lvl].extra==='llibre'&&r<.18)drop('llibre',f.x,f.y);else if(r<.1)drop('rosa',f.x,f.y);
+  }
+  hud();
+}
+function befriend(f){
+  const t=S.party[S.party.length-1];S.party.push(hero(f.F.ally,t.x,t.y));
+  burst(f.x+1,f.y+1,'#ffd23f',30);
+  if(f.F.final){
+    S.banner={text:"S'ha fet amic!",sub:'Ni morts ni ferits: només tenia gana',t:3200};
+    for(const o of S.foes)if(o!==f){o.dead=1;burst(o.x+.5,o.y+.5,'#f3efe4',6)}
+    S.spawns=[];
+  }else S.banner={text:HEROES[f.F.ally].name,sub:"S'ha acabat la pólvora: s'uneix a la comitiva",t:2600};
+  sfx('win');hud();
+}
+function hurt(m,d){
+  if(m.dead)return;
+  m.hp-=d;m.flash=140;txt(m.x+.5,m.y,'-'+d,'#ff6b5b');sfx('hurt');
+  if(m.hp>0)return;
+  m.dead=1;const i=S.party.indexOf(m);
+  // close the gap: everyone behind steps forward one slot
+  for(let j=S.party.length-1;j>i;j--){const a=S.party[j],b=S.party[j-1];a.px=a.x;a.py=a.y;a.x=b.x;a.y=b.y}
+  S.party.splice(i,1);S.shake=250;
+  burst(m.x+.5,m.y+.5,'#c0392b',12);txt(m.x+.5,m.y-.3,HEROES[m.type].name+' cau','#fff');sfx('death');
+  if(!S.party.length)gameOver('Tota la comitiva ha caigut.');
+  hud();
+}
+function saveBest(){if(S.score>best){best=S.score;try{localStorage.setItem('gesta-sant-jordi-best',best)}catch{}}}
+function endScreen(eyebrow,title,text){
+  saveBest();
+  $('o-eyebrow').textContent=eyebrow;$('reason').textContent=title;$('o-text').textContent=text;
+  $('o-chap').textContent=ROMAN[S.lvl];$('o-kills').textContent=S.kills;$('o-score').textContent=S.score;$('o-best').textContent=best;hud();
+  $('retry').hidden=S.mode==='win';
+  setTimeout(()=>{$('over').hidden=false;$('again').focus()},900);
+}
+function gameOver(reason){
+  if(S.mode!=='play')return;S.mode='over';
+  S.party.forEach(m=>burst(m.x+.5,m.y+.5,'#c0392b',8));S.shake=400;sfx('over');
+  endScreen('Fi de la gesta',reason,`La comitiva ha arribat fins a ${LEVELS[S.lvl].place}, capítol ${ROMAN[S.lvl]}, onada ${Math.min(S.wave,3)}${S.wave===4?' i el drac':''}.`);
+}
+function win(){
+  S.mode='win';S.score+=1000;sfx('win');
+  endScreen('Conte desexplicat','Conte contat, conte acabat',"El drac vegetarià s'ha unit a la comitiva. A la Rambla tothom regala roses i llibres, i ningú no ha hagut de salvar ningú.");
+}
+
+function step(){
+  if(S.queue.length)S.dir=S.queue.shift();
+  const h=S.party[0],nx=h.x+S.dir.x,ny=h.y+S.dir.y;
+  if(nx<0||ny<0||nx>=COLS||ny>=ROWS)return gameOver('Has topat amb la muralla.');
+  const ob=isBlock(nx,ny);if(ob)return gameOver(DEATH[ob]);
+  if(S.party.some((m,i)=>i<S.party.length-1&&m.x===nx&&m.y===ny))return gameOver("La comitiva s'ha trepitjat la cua.");
+  let prev={x:nx,y:ny};
+  for(const m of S.party){
+    const o={x:m.x,y:m.y};m.px=m.x;m.py=m.y;
+    if(prev.x!==m.x)m.face=prev.x>m.x?1:-1;
+    m.x=prev.x;m.y=prev.y;prev=o;
+  }
+  const k=S.items.findIndex(i=>i.x===nx&&i.y===ny);
+  if(k<0)return;
+  const it=S.items.splice(k,1)[0];
+  if(it.kind==='rosa'){S.party.forEach(m=>m.hp=Math.min(m.max,m.hp+3));txt(nx+.5,ny,'+3','#7dff7d');sfx('rose')}
+  else if(it.kind==='ovella'){S.score+=50;txt(nx+.5,ny,'Ovella salvada +50','#fff');sfx('coin')}
+  else if(it.kind==='llibre'){S.score+=100;txt(nx+.5,ny,'Llibre +100','#ffe066');sfx('coin')}
+  else if(it.kind==='captaire'){S.power=12000;S.banner={text:'Espasa de virtut',sub:'Dany doble durant 12 segons',t:1800};sfx('power')}
+  else{S.party.push(hero(it.kind,prev.x,prev.y));txt(nx+.5,ny-.3,HEROES[it.kind].name+" s'uneix",'#ffe066');burst(nx+.5,ny+.5,'#ffd23f',12);sfx('join')}
+  hud();
+}
+
+function moveFoe(f,t){
+  const F=f.F,dx=t.x<f.x?-1:t.x>f.x+f.size-1?1:0,dy=t.y<f.y?-1:t.y>f.y+f.size-1?1:0,opts=[];
+  if(F.erratic&&Math.random()<F.erratic)opts.push(pick([[1,0],[-1,0],[0,1],[0,-1]]));
+  else{
+    if(dx&&dy)opts.push(...(Math.random()<.5?[[dx,0],[0,dy]]:[[0,dy],[dx,0]]));else opts.push([dx,dy]);
+    opts.push(...(dx?[[0,1],[0,-1]]:[[1,0],[-1,0]]).sort(()=>Math.random()-.5)); // sidestep obstacles
+  }
+  f.px=f.x;f.py=f.y;
+  for(const[ax,ay]of opts){
+    let nx=f.x,ny=f.y;
+    for(let s=0;s<(F.hop||1);s++){
+      const tx=nx+ax,ty=ny+ay;
+      if(!walkable(tx,ty,f.size,F.fly)||S.foes.some(o=>o!==f&&!o.dead&&overlap(o,tx,ty,f.size))||!F.fly&&S.items.some(i=>overlap({x:tx,y:ty,size:f.size},i.x,i.y,1)))break;
+      nx=tx;ny=ty;
+    }
+    if(nx!==f.x||ny!==f.y){f.x=nx;f.y=ny;if(ax)f.face=ax;return}
+  }
+}
+function resizeBoss(f){
+  f.px=f.x;f.py=f.y;
+  if(f.size===2){f.size=1;f.move=320;f.dmg=2;txt(f.x+.5,f.y,'Es fa petit!','#a0d8f0')}
+  else if(walkable(f.x,f.y,2,false)&&!S.foes.some(o=>o!==f&&overlap(o,f.x,f.y,2))){f.size=2;f.move=f.F.move;f.dmg=f.F.dmg;S.shake=250;txt(f.x+1,f.y,'Es fa gegant!','#a0d8f0');sfx('roar')}
+}
+function breathe(f){
+  const h=S.party[0];if(!h)return;
+  const F=f.F,cx=f.x+f.size/2,cy=f.y+f.size/2,a=Math.atan2(h.y+.5-cy,h.x+.5-cx),v=F.shotSpeed||6;
+  const radial=F.radial&&(f.breaths=(f.breaths||0)+1)%2===0,n=radial?F.radial:F.spread||1; // every other breath: a wheel of sparks
+  for(let i=0;i<n;i++){const b=radial?a+i/n*6.283:a+(i-(n-1)/2)*.32;S.shots.push({x:cx,y:cy,vx:Math.cos(b)*v,vy:Math.sin(b)*v,dmg:f.dmg,hostile:1,color:F.shot})}
+  sfx('fire');
+}
+
+function update(dt){
+  for(const f of S.fx){f.t+=dt;if(f.vx!==undefined){f.x+=f.vx*dt/1000;f.y+=f.vy*dt/1000;if(f.g)f.vy+=8*dt/1000}}
+  S.fx=S.fx.filter(f=>f.t<f.life);
+  S.shake=Math.max(0,S.shake-dt);
+  if(S.mode!=='play'||S.paused)return;
+  if(S.banner&&(S.banner.t-=dt)<=0)S.banner=null;
+  S.power=Math.max(0,S.power-dt);
+  if(LEVELS[S.lvl].night&&Math.random()<dt/900){burst(1+Math.random()*(COLS-2),Math.random()*ROWS*.7,pick(['#ffd23f','#ff8a2a','#ec8fb0','#8ff4ff']),14);sfx('petard')}
+  S.acc+=dt;
+  while(S.acc>=S.tick){S.acc-=S.tick;step();if(S.mode!=='play')return}
+
+  for(const m of S.party){
+    const H=HEROES[m.type];m.cd-=dt;m.flash-=dt;
+    if(H.heal&&(m.healT=(m.healT??H.heal)-dt)<=0){
+      m.healT=H.heal;const w=S.party.reduce((a,b)=>b.hp/b.max<a.hp/a.max?b:a);
+      if(w.hp<w.max){w.hp=Math.min(w.max,w.hp+2);txt(w.x+.5,w.y,'+2','#7dff7d')}
+    }
+    if(m.cd>0)continue;
+    let tgt=null,td=H.range;
+    for(const f of S.foes){const d=gap(f,m);if(!f.dead&&d<=td){td=d;tgt=f}}
+    if(!tgt)continue;
+    m.cd=H.cd;const dmg=H.dmg*(S.power>0?2:1);
+    if(H.aoe){S.fx.push({ring:1,x:m.x+.5,y:m.y+.5,r:H.range,color:H.aoe,t:0,life:380});for(const f of S.foes)if(gap(f,m)<=H.range)hitFoe(f,dmg);sfx('aoe')}
+    else if(H.shot){S.shots.push({x:m.x+.5,y:m.y+.5,tgt,dmg,color:H.shot,stun:H.stun});sfx('shot')}
+    else{const p=fpos(tgt);S.fx.push({x:p.x,y:p.y,slash:1,a:Math.random()*6.28,t:0,life:170});hitFoe(tgt,dmg);sfx('melee')}
+  }
+
+  for(const f of S.foes){
+    if(f.dead)continue;
+    const F=f.F;f.flash-=dt;f.cd-=dt;f.mt+=dt;
+    if(f.stun>0){f.stun-=dt;continue}
+    if(F.rage&&(f.rt-=dt)<=0){f.rt=F.rage.every;f.rage=F.rage.dur;sfx('roar')}
+    f.rage-=dt;
+    if(F.shrink&&(f.st-=dt)<=0){f.st=F.shrink;resizeBoss(f)}
+    f.cur=f.rage>0?F.rage.move:f.move;
+    let t=null,bd=1e9;
+    for(const m of S.party){const d=gap(f,m);if(d<bd){bd=d;t=m}}
+    if(!t)break;
+    if(bd<=(F.reach||1.5)){if(f.cd<=0){f.cd=F.cd;hurt(t,f.dmg)}}
+    else if(f.mt>=f.cur){f.mt=0;moveFoe(f,t)}
+    if(F.fire&&!(F.shrink&&f.size<2)&&(f.ft-=dt)<=0){f.ft=F.fire;breathe(f)}
+  }
+
+  for(const s of S.shots){
+    if(s.hostile){
+      s.x+=s.vx*dt/1000;s.y+=s.vy*dt/1000;
+      S.fx.push({x:s.x,y:s.y,vx:0,vy:0,color:s.color,t:0,life:220});
+      if(s.x<0||s.y<0||s.x>COLS||s.y>ROWS){s.dead=1;continue}
+      const m=S.party.find(m=>Math.hypot(m.x+.5-s.x,m.y+.5-s.y)<.55);
+      if(m){hurt(m,s.dmg);burst(s.x,s.y,s.color,8);s.dead=1}
+    }else{
+      if(s.tgt.dead){s.dead=1;continue}
+      const p=fpos(s.tgt),dx=p.x-s.x,dy=p.y-s.y,d=Math.hypot(dx,dy),v=14*dt/1000;
+      if(d<=v){if(s.stun)s.tgt.stun=s.tgt.F.big||s.tgt.type==='boss'?s.stun/3:s.stun;hitFoe(s.tgt,s.dmg);s.dead=1}
+      else{s.x+=dx/d*v;s.y+=dy/d*v}
+    }
+  }
+
+  for(const i of S.items)i.t+=dt;
+  S.items=S.items.filter(i=>i.kind!=='rosa'||i.t<12000);
+  S.foes=S.foes.filter(f=>!f.dead);S.shots=S.shots.filter(s=>!s.dead);
+
+  if(S.spawns.length){
+    if((S.spawnT-=dt)<=0){S.spawnT=Math.max(350,1300-(S.lvl*3+S.wave)*50);if(spawnFoe(S.spawns[0]))S.spawns.shift()}
+  }else if(!S.foes.length&&(S.clearT+=dt)>1600){
+    if(S.wave<4){S.score+=50*(S.lvl*4+S.wave);nextWave()}
+    else if(S.lvl<LEVELS.length-1){S.score+=500*(S.lvl+1);showChapter(S.lvl+1)}
+    else win();
+  }
+}
+
+// ===== render =====
+function drawSpr(name,x,y,size=1,flip=false,flash=false){
+  const e=size>1&&SP[name].big||SP[name],s=T*size,u=s/e.res,px=Math.round(x*T),py=Math.round(y*T);
+  ctx.save();
+  if(flip){ctx.translate(px+s,py);ctx.scale(-1,1)}else ctx.translate(px,py);
+  ctx.drawImage(e.n,-u,-u,s+2*u,s+2*u);
+  // hit flash as a translucent white layer: a beast hit by the whole party never turns into a blank silhouette
+  if(flash){ctx.globalAlpha=.6;ctx.drawImage(e.f,-u,-u,s+2*u,s+2*u)}
+  ctx.restore();
+}
+function shadow(cx,cy,r){ctx.fillStyle='rgba(40,25,10,.3)';ctx.beginPath();ctx.ellipse(cx*T,cy*T,r*T,r*T*.36,0,0,6.29);ctx.fill()}
+function bar(x,y,w,ratio,color){
+  const u=T/16,px=Math.round(x*T+2*u),py=Math.round(y*T),bw=w*T-4*u,h=Math.max(2,2*u);
+  ctx.fillStyle=PAL.k;ctx.fillRect(px-u,py-u,bw+2*u,h+2*u);ctx.fillStyle='#3a2a20';ctx.fillRect(px,py,bw,h);
+  ctx.fillStyle=color;ctx.fillRect(px,py,Math.max(0,Math.round(bw*ratio)),h);
+}
+function label(str,x,y,size,color){
+  ctx.font=`700 ${Math.round(size)}px "Pixelify Sans", ui-monospace, monospace`;ctx.textAlign='center';
+  const o=Math.max(1,Math.round(size/12));ctx.fillStyle=PAL.k;ctx.fillText(str,x+o,y+o);ctx.fillStyle=color;ctx.fillText(str,x,y);
+}
+function gothic(str,x,y,size,color){
+  ctx.font=`700 ${Math.round(size)}px "Grenze Gotisch", Georgia, serif`;ctx.textAlign='center';
+  ctx.lineWidth=Math.max(2,size/10);ctx.strokeStyle='#121735';ctx.strokeText(str,x,y);ctx.fillStyle=color;ctx.fillText(str,x,y);
+}
+
+function render(now){
+  const u=T/16,pt=Math.min(1,S.acc/S.tick),W=cv.width,H=cv.height,moving=S.mode==='play'&&!S.paused;
+  ctx.save();
+  if(S.shake>0){const k=S.shake/300*3*u;ctx.translate(Math.round((Math.random()-.5)*k),Math.round((Math.random()-.5)*k))}
+  ctx.drawImage(bg,0,0);
+  for(const k of WATER){ // shimmer
+    const x=k%64,y=k/64|0,h=hash(x,y),p=(now/650+h*7)%4;
+    if(p<1){ctx.fillStyle='rgba(225,242,255,.75)';ctx.fillRect(x*T+Math.round(3+h*8)*u+Math.round(p*2)*u,y*T+Math.round(4+h*h*8)*u,2*u,u)}
+  }
+
+  for(const it of S.items){
+    if(it.kind==='rosa'&&it.t>9000&&(it.t/150|0)%2)continue;
+    const bob=Math.round(Math.sin(now/260+it.x)*u)/T,cap=!!HEROES[it.kind];
+    shadow(it.x+.5,it.y+.9,.32);drawSpr(cap?sprOf(it.kind):it.kind,it.x,it.y+bob);
+    if(cap){ // cage
+      const px=it.x*T,py=Math.round((it.y+bob)*T);ctx.fillStyle='#3a2616';
+      for(const c of[0,5,10,15])ctx.fillRect(px+c*u,py-u,u,T+u);
+      ctx.fillRect(px,py-u,T,2*u);ctx.fillRect(px,py+T-2*u,T,2*u);
+    }
+    if(it.kind==='captaire'&&(now/300|0)%2){ctx.fillStyle='#ffe066';ctx.fillRect(it.x*T+13*u,it.y*T+u,2*u,2*u)}
+  }
+
+  for(const f of S.foes){
+    const p=fpos(f),x=p.x-f.size/2;let y=p.y-f.size/2;
+    const flying=f.F.fly||f.type==='boss';
+    if(flying)y-=Math.abs(Math.sin(now/(f.type==='boss'?300:110)+f.x))*.12;
+    shadow(x+f.size/2,p.y+f.size*.45,.34*f.size);
+    const spr=f.F.spr==='bat'&&SP.bat.res===16&&(now/120|0)%2?'bat2':f.F.spr;
+    drawSpr(spr,x,y,f.size,f.face<0,f.flash>0);
+    if(f.rage>0&&(now/80|0)%2){ctx.fillStyle='rgba(255,80,40,.25)';ctx.fillRect(Math.round(x*T),Math.round(y*T),f.size*T,f.size*T)}
+    if(f.stun>0){ctx.fillStyle='#f3efe4';for(let i=0;i<3;i++){const a=now/200+i*2.1;ctx.fillRect(Math.round((x+f.size/2+Math.cos(a)*.3)*T),Math.round((y-.1+Math.sin(a)*.1)*T),2*u,2*u)}}
+    if(f.hp<f.max&&f.type!=='boss'&&!f.F.big)bar(x,y-.2,f.size,f.hp/f.max,'#d8343f');
+  }
+
+  for(let i=S.party.length-1;i>=0;i--){
+    const m=S.party[i],x=L(m.px,m.x,pt),y=L(m.py,m.y,pt),hop=moving?Math.round(Math.sin(pt*Math.PI)*1.5*u)/T:0;
+    shadow(x+.5,y+.92,.34);
+    if(i===0){ctx.strokeStyle='#ffd23f';ctx.lineWidth=u;ctx.beginPath();ctx.ellipse((x+.5)*T,(y+.92)*T,.46*T,.17*T,0,0,6.29);ctx.stroke()}
+    drawSpr(sprOf(m.type),x,y-hop,1,m.face<0,m.flash>0);
+    if(S.power>0&&(now/90+i)%3<1){ctx.fillStyle='#ffe066';ctx.fillRect(Math.round((x+hash(i,now/90|0))*T),Math.round((y+hash(now/90|0,i))*T),2*u,2*u)}
+    bar(x,y-hop-.24,1,m.hp/m.max,'#5fd35f');
+  }
+  if(LEVELS[S.lvl].night)nightLayer(now);
+
+  for(const s of S.shots){
+    const cx=Math.round(s.x*T),cy=Math.round(s.y*T);
+    if(s.hostile){
+      ctx.fillStyle=PAL.k;ctx.beginPath();ctx.arc(cx,cy,T*.24,0,6.29);ctx.fill();
+      ctx.fillStyle=s.color;ctx.beginPath();ctx.arc(cx,cy,T*.2,0,6.29);ctx.fill();
+      ctx.fillStyle='#fff6c0';ctx.beginPath();ctx.arc(cx,cy,T*.08,0,6.29);ctx.fill();
+    }else{
+      ctx.fillStyle=PAL.k;ctx.fillRect(cx-3*u,cy-3*u,6*u,6*u);ctx.fillStyle=s.color;ctx.fillRect(cx-2*u,cy-2*u,4*u,4*u);
+    }
+  }
+
+  for(const f of S.fx){
+    const k=1-f.t/f.life;ctx.globalAlpha=Math.min(1,k*2);
+    if(f.str)label(f.str,f.x*T,(f.y-f.t/1000*.9)*T,T*.4,f.color);
+    else if(f.slash){ctx.strokeStyle='#fff';ctx.lineWidth=2*u;ctx.beginPath();ctx.arc(f.x*T,f.y*T,T*.6,f.a,f.a+.4+2.4*(1-k));ctx.stroke()}
+    else if(f.ring){ctx.strokeStyle=f.color;ctx.lineWidth=2*u;ctx.beginPath();ctx.arc(f.x*T,f.y*T,Math.max(1,f.r*T*(1-k*k)),0,6.29);ctx.stroke()}
+    else{ctx.fillStyle=f.color;ctx.fillRect(Math.round(f.x*T),Math.round(f.y*T),2*u,2*u)}
+  }
+  ctx.globalAlpha=1;
+  ctx.restore();
+
+  const boss=S.foes.find(f=>f.type==='boss'||f.F.big);
+  if(boss){
+    const w=Math.min(W*.6,T*9),x=(W-w)/2,y=Math.round(T*.62),h=Math.max(4,Math.round(T/5));
+    label(boss.F.bar?boss.F.name+' · '+boss.F.bar:boss.F.name,W/2,y-T*.12,T*.38,'#efe2c2');
+    ctx.fillStyle=PAL.k;ctx.fillRect(x-u,y-u,w+2*u,h+2*u);ctx.fillStyle='#3a2a20';ctx.fillRect(x,y,w,h);
+    ctx.fillStyle=boss.F.bar==='pólvora'?'#ffb02a':boss.F.friend?'#8ad05a':'#d8343f';ctx.fillRect(x,y,Math.round(w*boss.hp/boss.max),h);
+  }
+  const left=S.foes.length;
+  if(S.mode==='play'&&!S.spawns.length&&left&&left<=3)label(left>1?`Queden ${left} bèsties`:'Queda 1 bèstia',W/2,H-T*.3,T*.4,'#efe2c2');
+  if(S.banner){
+    ctx.globalAlpha=Math.min(1,S.banner.t/400);
+    gothic(S.banner.text,W/2,H*.42,T*1.3,'#ffd23f');
+    if(S.banner.sub)label(S.banner.sub,W/2,H*.42+T*.85,T*.45,'#efe2c2');
+    ctx.globalAlpha=1;
+  }
+  if(S.paused){
+    ctx.fillStyle='rgba(18,23,53,.55)';ctx.fillRect(0,0,W,H);
+    gothic('Pausa',W/2,H/2,T*1.3,'#ffd23f');label('Espai per continuar',W/2,H/2+T*.9,T*.45,'#efe2c2');
+  }
+}
+
+let dark=null;
+function nightLayer(now){
+  if(!dark||dark.width!==cv.width||dark.height!==cv.height){dark=document.createElement('canvas');dark.width=cv.width;dark.height=cv.height}
+  const d=dark.getContext('2d'),pt=Math.min(1,S.acc/S.tick);
+  d.globalCompositeOperation='source-over';d.clearRect(0,0,dark.width,dark.height);
+  d.fillStyle='rgba(10,12,38,.68)';d.fillRect(0,0,dark.width,dark.height);
+  d.globalCompositeOperation='destination-out';
+  const light=(x,y,r,a)=>{const g=d.createRadialGradient(x*T,y*T,0,x*T,y*T,r*T);g.addColorStop(0,`rgba(0,0,0,${a})`);g.addColorStop(1,'rgba(0,0,0,0)');d.fillStyle=g;d.fillRect((x-r)*T,(y-r)*T,2*r*T,2*r*T)};
+  S.party.forEach((m,i)=>light(L(m.px,m.x,pt)+.5,L(m.py,m.y,pt)+.5,i?1.8:3.6,i?.7:1));
+  for(const f of S.foes){const p=fpos(f);f.F.fire?light(p.x,p.y,1.2+f.size,.5+.15*Math.sin(now/90+f.x)):light(p.x,p.y,1.1,.6)}
+  for(const s of S.shots)if(s.hostile)light(s.x,s.y,1.3,.9);
+  for(const it of S.items)light(it.x+.5,it.y+.5,1.2,.55);
+  let n=0;for(const f of S.fx)if(f.g&&n++<60)light(f.x,f.y,.8,.4);
+  ctx.drawImage(dark,0,0);
+}
+
+// ===== UI & input =====
+function hud(){
+  const lv=LEVELS[S.lvl];
+  $('place').textContent=`${lv.place} · ${lv.title}`;$('chap').textContent=ROMAN[S.lvl];
+  $('wave').textContent=S.wave===4?'Drac':S.wave?S.wave+'/3':'·';
+  $('score').textContent=S.score;$('best').textContent=Math.max(best,S.score);
+}
+function turn(x,y){
+  if(S.mode!=='play'||S.paused)return;
+  const l=S.queue.at(-1)||S.dir;
+  if((x===-l.x&&y===-l.y)||(x===l.x&&y===l.y)||S.queue.length>2)return;
+  S.queue.push({x,y});
+}
+function setPause(p){if(S.mode!=='play')return;S.paused=p;$('pause').textContent=p?'Continua':'Pausa'}
+function setSound(on){
+  AU.on=on;$('snd').textContent=on?'So: sí':'So: no';
+  try{localStorage.setItem('gesta-so',on?'1':'0')}catch{}
+  if(AU.master)AU.master.gain.value=on?.6:0;
+}
+function startAt(i){
+  audio();$('over').hidden=true;newRun('chapter');
+  // skipping ahead: bring the heroes you'd have rescued in earlier chapters
+  S.party=['jordi',...LEVELS.slice(0,i).flatMap(l=>l.heroes)].map(t=>hero(t,2,ROWS>>1));
+  showChapter(i);
+}
+const start=()=>startAt(0);
+const visible=id=>!$(id).hidden;
+
+const KEYS={ArrowUp:[0,-1],KeyW:[0,-1],ArrowDown:[0,1],KeyS:[0,1],ArrowLeft:[-1,0],KeyA:[-1,0],ArrowRight:[1,0],KeyD:[1,0]};
+addEventListener('keydown',e=>{
+  if(e.code==='KeyM'){setSound(!AU.on);return}
+  if(visible('chapter')){if(e.code==='Enter'){e.preventDefault();audio();play()}return}
+  if(visible('intro')||visible('over')){if(e.code==='Enter'){e.preventDefault();start()}return}
+  const k=KEYS[e.code];
+  if(k){e.preventDefault();turn(...k)}
+  else if(e.code==='Space'||e.code==='KeyP'||e.code==='Escape'){e.preventDefault();setPause(!S.paused)}
+});
+let ts=null;
+stage.addEventListener('touchstart',e=>{const t=e.touches[0];ts={x:t.clientX,y:t.clientY}},{passive:true});
+stage.addEventListener('touchmove',e=>{
+  if(!ts||S.mode!=='play')return;
+  e.preventDefault();
+  const t=e.touches[0],dx=t.clientX-ts.x,dy=t.clientY-ts.y;
+  if(Math.max(Math.abs(dx),Math.abs(dy))<24)return;
+  Math.abs(dx)>Math.abs(dy)?turn(Math.sign(dx),0):turn(0,Math.sign(dy));
+  ts={x:t.clientX,y:t.clientY};
+},{passive:false});
+$('go').onclick=start;$('again').onclick=start;$('retry').onclick=()=>startAt(S.lvl);$('ch-go').onclick=()=>{audio();play()};
+$('pause').onclick=e=>{setPause(!S.paused);e.currentTarget.blur()};
+$('snd').onclick=e=>{audio();setSound(!AU.on);e.currentTarget.blur()};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)setPause(true)});
+addEventListener('resize',()=>S.mode==='idle'?newRun('idle'):fit());
+
+$('chapters').innerHTML=LEVELS.map((l,i)=>`<li><button class="chap" type="button" data-i="${i}"><b>${l.place}</b> · ${l.title}</button></li>`).join('');
+$('chapters').onclick=e=>{const b=e.target.closest('.chap');if(b)startAt(+b.dataset.i)};
+$('all-heroes').innerHTML=Object.keys(HEROES).map(h=>`<li title="${HEROES[h].name}"><canvas class="spr" data-spr="${sprOf(h)}"></canvas></li>`).join('');
+paintMinis($('intro'));
+setSound(AU.on);
+newRun('idle');
+const deep=/^#capitol([1-6])$/.exec(location.hash);if(deep)startAt(deep[1]-1); // e.g. #capitol5
+let last=0;
+requestAnimationFrame(function frame(t){
+  update(Math.min(50,t-(last||t)));last=t;render(t);
+  requestAnimationFrame(frame);
+});
+</script>
