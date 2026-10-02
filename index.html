@@ -554,7 +554,9 @@ function showChapter(i){
   $('ch-foes').innerHTML=[...new Set(lv.foes)].map(f=>chip(FOES[f].spr,FOES[f].name,FOES[f].role)).join('')
     +(lv.beasts?'':bossChip)+chip('rosa',ITEMS.rosa.name,ITEMS.rosa.role)+chip(lv.extra,ITEMS[lv.extra].name,ITEMS[lv.extra].role);
   paintMinis($('chapter'));
-  $('intro').hidden=true;$('over').hidden=true;$('chapter').hidden=false;$('ch-go').focus();
+  $('intro').hidden=true;$('over').hidden=true;$('chapter').hidden=false;
+  // focus without scrolling: on a phone the card is taller than the screen and the story must start at the top
+  $('ch-go').focus({preventScroll:true});$('chapter').querySelector('.card').scrollTop=0;
 }
 function play(){if(S.mode!=='chapter')return;$('chapter').hidden=true;S.mode='play';setPause(false);nextWave()}
 
